@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LoginformComponent } from './loginform.component';
+import { ChromecastPageComponent } from './chromecast-page.component';
 
-describe('LoginformComponent', () => {
-  let component: LoginformComponent;
-  let fixture: ComponentFixture<LoginformComponent>;
+describe('ChromecastPageComponent', () => {
+  let component: ChromecastPageComponent;
+  let fixture: ComponentFixture<ChromecastPageComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LoginformComponent ]
+      declarations: [ ChromecastPageComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LoginformComponent);
+    fixture = TestBed.createComponent(ChromecastPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

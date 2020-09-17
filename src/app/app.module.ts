@@ -20,16 +20,14 @@ import {
   NzSliderModule,
   NzTypographyModule
 } from 'ng-zorro-antd';
-import {LoginpageComponent} from './loginpage/loginpage.component';
-import {LoginformComponent} from './loginform/loginform.component';
+import { ChromecastPageComponent } from './chromecast-page/chromecast-page.component';
 
 registerLocaleData(en);
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginpageComponent,
-    LoginformComponent
+    ChromecastPageComponent
   ],
   imports: [
     BrowserModule,
