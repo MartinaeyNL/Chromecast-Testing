@@ -1,1 +1,3 @@
 <p>chromecast-page works!</p>
+<i nz-icon nzType="chrome" nzTheme="outline"  *ngIf="!castingStatus.casting"(click)="openSession()"></i>
+<i nz-icon nzType="chrome" nzTheme="fill"  *ngIf="castingStatus.casting"(click)="closeSession()"></i>
