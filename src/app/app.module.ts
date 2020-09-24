@@ -11,13 +11,14 @@ import { en_US } from 'ng-zorro-antd/i18n';
 import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
 import {
+  NzAvatarModule,
   NzButtonModule,
   NzCardModule,
   NzCheckboxModule,
   NzFormModule,
   NzIconModule,
-  NzInputModule,
-  NzSliderModule,
+  NzInputModule, NzPageHeaderModule,
+  NzSliderModule, NzTableModule,
   NzTypographyModule
 } from 'ng-zorro-antd';
 import { ChromecastPageComponent } from './chromecast-page/chromecast-page.component';
@@ -43,7 +44,10 @@ registerLocaleData(en);
     NzCheckboxModule,
     NzButtonModule,
     NzCardModule,
-    NzTypographyModule
+    NzTypographyModule,
+    NzTableModule,
+    NzAvatarModule,
+    NzPageHeaderModule
   ],
   providers: [{ provide: NZ_I18N, useValue: en_US }],
   bootstrap: [AppComponent]

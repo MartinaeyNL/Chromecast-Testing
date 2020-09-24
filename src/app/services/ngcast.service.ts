@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
-import {Observable, Subject} from 'rxjs';
-import {CastingState} from "../models/casting-state";
+import {BehaviorSubject, Observable, Subject, throwError} from 'rxjs';
+import {CastingState} from '../models/casting-state';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NgcastService {
+
+  /* tslint:disable:no-string-literal */
 
   // Variables
   private castSession;
@@ -15,8 +17,13 @@ export class NgcastService {
     casting: false
   };
 
+  private runningSessionsSubject: BehaviorSubject<any[]> = new BehaviorSubject<any[]>(['Test1', 'Test2']);
+  public runningSessions: Observable<any[]>;
+
   // Constructor
-  constructor() {}
+  constructor() {
+    this.runningSessions = this.runningSessionsSubject.asObservable();
+  }
 
 
   /*-----------------------------*/
@@ -24,11 +31,12 @@ export class NgcastService {
 
   // Init Process
   initializeCastApi(): void {
-    this.cast = window['chrome'].cast;
+    this.cast = window['chrome'].cast; // Get CAST
     const sessionRequest = new this.cast.SessionRequest(this.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID);
     const apiConfig = new this.cast.ApiConfig(sessionRequest,
       s => { },
-      status => { if (status === this.cast.ReceiverAvailability.AVAILABLE) { } }
+      status => { if (status === this.cast.ReceiverAvailability.AVAILABLE) { } },
+      this.cast.AutoJoinPolicy.ORIGIN_SCOPED
     );
     const x = this.cast.initialize(apiConfig, this.onInitSuccess, this.onError);
   }
@@ -36,6 +44,7 @@ export class NgcastService {
   // Success emitter
   private onInitSuccess = (e) => {
     console.log('GCast initialization success');
+    console.log(this.cast);
   }
 
   // Error emitter
@@ -50,14 +59,15 @@ export class NgcastService {
     const subj = new Subject();
     this.cast.requestSession(
       (s) => {
-        self.castSession = s;
-        self.setCasting(true);
-        subj.next('CONNECTED');
+        console.log(s);
+        const sessionsCopy = self.runningSessionsSubject.getValue() as any[];
+        console.log(sessionsCopy);
+        sessionsCopy.push('lalalalalalala');
+        self.runningSessionsSubject.next(sessionsCopy);
+        subj.next(s);
       }, (err) => {
-        self.setCasting(false);
         if (err.code === 'cancel') {
-          self.castSession = undefined;
-          subj.next('CANCEL');
+          subj.error(err);
         } else {
           console.error('Error selecting a cast device', err);
         }
@@ -95,6 +105,14 @@ export class NgcastService {
   pauseMedia(): void { this.currentMedia.pause(null); }
   stopMedia(): void { this.currentMedia.stop(null); }
 
+  playUrl(session, url: string): void {
+    const mediaInfo = this.cast.media.MediaInfo(url, 'text/html');
+    const request = this.cast.media.LoadRequest(mediaInfo);
+    session.loadMedia(request).then(
+      () => { console.log('Load succeed'); },
+      (errorCode) => { console.log('Error code: ' + errorCode); }
+    );
+  }
 
   setCasting(value): void {
     this.status.casting = value;

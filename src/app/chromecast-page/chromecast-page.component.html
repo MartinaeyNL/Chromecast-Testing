@@ -1,3 +1,33 @@
 <p>chromecast-page works!</p>
-<i nz-icon nzType="chrome" nzTheme="outline"  *ngIf="!castingStatus.casting"(click)="openSession()"></i>
-<i nz-icon nzType="chrome" nzTheme="fill"  *ngIf="castingStatus.casting"(click)="closeSession()"></i>
+
+<div>
+  <div *ngFor="let dashboard of this.dashboards" class="m-12">
+    <nz-card [nzTitle]="dashboard.name" [nzExtra]="actionsMenu">
+      <p>Card Content</p>
+    </nz-card>
+    <ng-template #actionsMenu>
+      <nz-page-header [nzGhost]="false">
+        <nz-page-header-extra>
+          <button nz-button nzSize="large" nzType="link">
+            <i nz-icon nzType="setting" nzTheme="outline"></i>
+          </button>
+          <button *ngIf="dashboard.activeCast; else castNotActive" nz-button nzSize="small" nzType="link" (click)="openSession(dashboard)">
+            <i nz-icon><img src="assets/casticon_blueactive.png" /></i>Active!
+          </button>
+          <ng-template #castNotActive>
+            <button nz-button nzSize="small" nzType="link" (click)="openSession(dashboard)">
+              <i nz-icon><img src="assets/casticon_grey.png" /></i>
+            </button>
+          </ng-template>
+        </nz-page-header-extra>
+      </nz-page-header>
+    </ng-template>
+  </div>
+</div>
+
+<!--<div *ngFor="let session of this.runningDevices">
+  <nz-card nzTitle="session.receiver.friendlyName">
+    <p>Card Content</p>
+  </nz-card>
+  <button nz-button (click)="playUrl(session)">Play Jarpis Website</button>
+</div>-->
